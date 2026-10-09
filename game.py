@@ -8,9 +8,19 @@ def type_scroll(text, delay=0.05):
         time.sleep(delay)
     print()
 
+def intinput(question):
+    while 1:
+        user_input = input(question)
+        try:
+            integer_value = int(user_input)
+            return(integer_value)
+        except ValueError:
+            type_scroll("Come on, enter a whole number.")
+
 def randint_guess():
     global willow
     number = random.randint(1, 100)
+    type_scroll("I'm thinking of a number between 1 and 100.")
     type_scroll("Get it under 5 guesses, you get 20 willow.")
     type_scroll("5-6 guesses, 0 willow.")
     type_scroll("7 guesses, pay 5 willow. ")
@@ -18,7 +28,7 @@ def randint_guess():
     attempt = 0
     while 1:
         try:
-            guess = int(input("Guess the secret number: "))
+            guess = intinput("Guess the secret number: ")
             attempt += 1
             if guess == number:
                 type_scroll("you guessed it!")
@@ -43,6 +53,15 @@ def randint_guess():
         type_scroll("That means you win 20 willow... that's a bit much, but I guess I agreed...")
         willow += 20
 
+def antler_cup():
+    global willow
+    type_scroll("A part of my antler broke off once upon a time.")
+    type_scroll("I've hidden it under cup 1, 2, or 3.")
+    type_scroll("Just guess the cup and double the amount you put in!")
+    bet = intinput("So how much willow would you like to put in? ")
+    if bet > willow:
+        type_scroll("Too much, you'll end up in debt!")
+
 type_scroll("Welcome to my cabin, agent.")
 type_scroll("You can call me moosespy.")
 type_scroll("You are most likely here to play some small minigames.")
@@ -56,11 +75,11 @@ while 1:
     type_scroll("Let's play!")
     type_scroll("Our games are: ")
     print("1) Number Guesser")
-    game = int(input("Please input the number of the game you wish to play: "))
+    game = intinput("Please input the number of the game you wish to play: ")
     while 1:
         if game == 1:
             randint_guess()
             break
         else:
-            game = int(input("Not a valid game, sir. Please input the number of the game you wish to play: "))
+            game = intinput("Not a valid game, sir. Please input the number of the game you wish to play: ")
     type_scroll(f"You have {willow} willow.")
