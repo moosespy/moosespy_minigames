@@ -8,14 +8,11 @@ games_played = 0
 
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
-
-
 def type_scroll(text, delay=0.02):
     for char in text:
         print(char, end="", flush=True)
         time.sleep(delay)
     print()
-
 def intinput(question):
     while 1:
         user_input = input(question)
@@ -60,7 +57,6 @@ def randint_guess():
     else:
         type_scroll("That means you win 20 willow... that's a bit much, but I guess I agreed...")
         willow += 20
-
 def antler_cup():
     global willow
     og_willow = willow
@@ -102,16 +98,36 @@ def antler_cup():
                 willow = willow - (bet * streak)
             break
     type_scroll("Good game. Hope you liked it.") 
-        
-type_scroll("Welcome to my cabin, agent.")
-type_scroll("You can call me moosespy.")
-type_scroll("You are most likely here to play some small minigames.")
-type_scroll("Now, I love willow. Willow is my favorite food. If you wish to play, you must have some willow available.")
-type_scroll("Here's 50 willow. I'm feeling generous.")
-willow = 50
-type_scroll("I'm bored, so I'll let you play some games with me.")
-type_scroll("Lose all that willow back to me and I'll be bored again, so I'll kick you out. Game over.")
-type_scroll("So try to win as much willow as you can!")
+
+def intro():
+    global willow
+    type_scroll("Welcome to my cabin, agent.")
+    type_scroll("Finally a visitor! I've been pretty bored lately.")
+    type_scroll("You can call me moosespy.")
+    type_scroll("You are most likely here to play some small minigames.")
+    type_scroll("If you're not, then too bad, because I don't have much else to do.")
+    type_scroll("Now, I love willow. Willow is my favorite food. If you wish to play, you must have some willow available.")
+    type_scroll("Here's 50 willow. I'm feeling generous.")
+    willow = 50
+    type_scroll("I'm bored, so I'll let you play some games with me.")
+    type_scroll("Lose all that willow back to me and I'll be bored again, so I'll kick you out. Game over.")
+    type_scroll("So try to win as much willow as you can!")
+def ending():
+    type_scroll("So you ended up losing all your willow to me.")
+    time.sleep(1)
+    type_scroll("'sigh'... I'm bored again. Sadly, you'll be kicked out... ")
+    time.sleep(1)
+    type_scroll("...you're just not entertaining if you lose all your willow.")
+    time.sleep(1)
+    if games_played == 1:
+        type_scroll(f"At least we got to play a game... but only 1...")
+    else:
+        type_scroll(f"At least we got to play {games_played} games.")
+    time.sleep(1)
+    type_scroll("Goodbye, agent.")
+    sys.exit()
+
+intro()
 while 1:
     time.sleep(1)
     while 1:
@@ -150,16 +166,4 @@ while 1:
             game = intinput("Not a valid game, sir. Please input the number of the game you wish to play: ")
     type_scroll(f"You have {willow} willow.")
     if willow <= 0:
-        type_scroll("So you ended up losing all your willow to me.")
-        time.sleep(1)
-        type_scroll("'sigh'... I'm bored again. Sadly, you'll be kicked out... ")
-        time.sleep(1)
-        type_scroll("...you're just not entertaining if you lose all your willow.")
-        time.sleep(1)
-        if games_played == 1:
-            type_scroll(f"At least we got to play a game... but only 1...")
-        else:
-            type_scroll(f"At least we got to play {games_played} games.")
-        time.sleep(1)
-        type_scroll("Goodbye, agent.")
-        sys.exit()
+        ending()
