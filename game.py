@@ -2,7 +2,10 @@ import random
 import time
 import sys
 import builtins
-def type_scroll(text, delay=0.05):
+
+games_played = 0
+
+def type_scroll(text, delay=0.04):
     for char in text:
         print(char, end="", flush=True)
         time.sleep(delay)
@@ -57,10 +60,30 @@ def antler_cup():
     global willow
     type_scroll("A part of my antler broke off once upon a time.")
     type_scroll("I've hidden it under cup 1, 2, or 3.")
+    cup = random.randint(1, 3)
     type_scroll("Just guess the cup and double the amount you put in!")
-    bet = intinput("So how much willow would you like to put in? ")
-    if bet > willow:
-        type_scroll("Too much, you'll end up in debt!")
+    while 1:
+        while 1:
+            bet = intinput("So how much willow would you like to put in? ")
+            if bet > willow:
+                type_scroll("Too much, you'll end up in debt!")
+            else:
+                break
+        guess = intinput("So, then. What cup is my antler chunk under? ")
+        if guess == cup:
+            type_scroll(f"You got it. It was cup {cup}. You won {bet} willow.")
+            willow += bet
+            pag = input("Do you want to go again with the same bet? (y/n) ")
+            if pag == "y":
+                continue
+            else:
+                break
+        else:
+            type_scroll(f"Hah! Nope. It was cup {cup}! You just lost {bet} willow!")
+            willow -= bet
+            break
+    type_scroll("Good game. Hope you liked it.") 
+        
 
 type_scroll("Welcome to my cabin, agent.")
 type_scroll("You can call me moosespy.")
@@ -72,14 +95,30 @@ type_scroll("I'm bored, so I'll let you play some games with me.")
 type_scroll("Lose all that willow back to me and I'll be bored again, so I'll kick you out. Game over.")
 type_scroll("So try to win as much willow as you can!")
 while 1:
-    type_scroll("Let's play!")
+    time.sleep(1)
+    type_scroll("Let's play a game!")
     type_scroll("Our games are: ")
     print("1) Number Guesser")
+    print("2) Antler Cup")
     game = intinput("Please input the number of the game you wish to play: ")
     while 1:
         if game == 1:
             randint_guess()
+            games_played += 1
+            break
+        elif game == 2:
+            antler_cup()
+            games_played += 1
             break
         else:
             game = intinput("Not a valid game, sir. Please input the number of the game you wish to play: ")
     type_scroll(f"You have {willow} willow.")
+    if willow <= 0:
+        type_scroll("So you ended up losing all your willow to me.")
+        type_scroll("'sigh'... I'm bored again. Sadly, you'll be kicked out... ")
+        type_scroll("...you're just not entertaining if you lose all your willow.")
+        if games_played == 1:
+            type_scroll(f"At least we got to play a game... but only 1...")
+        else:
+            type_scroll(f"At least we got to play {games_played} games.")
+        sys.exit()
