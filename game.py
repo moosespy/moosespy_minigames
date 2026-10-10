@@ -98,6 +98,48 @@ def antler_cup():
                 willow = willow - (bet * streak)
             break
     type_scroll("Good game. Hope you liked it.") 
+def memory_game():
+    global willow
+    n_list = []
+    correct_numbers = 0
+    type_scroll("I'll flash 10 numbers in front of you, and you'll have to remember them in order.")
+    type_scroll("Get all 10 and you win 20 willow.")
+    type_scroll("Get 7-9 in their correct positions and you win 5 willow.")
+    type_scroll("Get 6 or less and you lose 10 willow.")
+    time.sleep(0.5)
+    input("Press Enter to start the game.")
+    for i in range(10):
+        number = random.randint(1, 99)
+        print(number)
+        n_list.append(number)
+        time.sleep(0.75)
+        clear_screen()
+        time.sleep(0.75)
+    type_scroll("That's 10 of them!")
+    for i in range(10):
+        guess = intinput(f"Now, enter the number you saw in position {i+1}: ")
+        if n_list[i] == guess:
+            type_scroll("Correct!")
+            correct_numbers += 1
+        else: 
+            type_scroll(f"Wrong! It was {n_list[i]}.")
+    if correct_numbers == 10:
+        type_scroll("You got all 10! You win 20 willow...")
+        willow += 20
+        type_scroll("...I guess I agreed to that. I don't know why, but I did.")
+        type_scroll("Good job, I guess. You have a good memory...")
+    elif correct_numbers >= 8:
+        type_scroll(f"You got {correct_numbers} correct. You win 10 willow.")
+        willow += 10
+        type_scroll("Hmmm, you won quite a bit... Good for you, I guess?")
+    elif correct_numbers >= 5:
+        type_scroll(f"You got {correct_numbers} correct. You win 5 willow.")
+        willow += 5
+        type_scroll("Well, you won something. Good for you.")
+    else:
+        type_scroll(f"Woo! You only got {correct_numbers} correct. I get 10 willow!")
+        willow -= 10
+        type_scroll("Thanks! That was tasty. I love willow.")
 
 def intro():
     global willow
@@ -150,6 +192,7 @@ while 1:
     type_scroll("Our games are: ")
     print("1) Number Guesser")
     print("2) Antler Cup")
+    print("3) Memory Game")
     game = intinput("Please input the number of the game you wish to play: ")
     while 1:
         if game == 1:
@@ -160,6 +203,11 @@ while 1:
         elif game == 2:
             clear_screen()
             antler_cup()
+            games_played += 1
+            break
+        elif game == 3:
+            clear_screen()
+            memory_game()
             games_played += 1
             break
         else:
