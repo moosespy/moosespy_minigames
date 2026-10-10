@@ -3,6 +3,11 @@ import time
 import sys
 import builtins
 import os
+import nltk
+
+nltk.download('words')
+from nltk.corpus import words
+word_list = words.words()
 
 games_played = 0
 
@@ -140,9 +145,75 @@ def memory_game():
         type_scroll(f"Woo! You only got {correct_numbers} correct. I get 10 willow!")
         willow -= 10
         type_scroll("Thanks! That was tasty. I love willow.")
+def hangman():
+    global willow
+    type_scroll("Hangman, huh?")
+    type_scroll("You have to guess the word I'm thinking of, letter by letter.")
+    type_scroll("A guess is either a letter or the whole word. ")
+    type_scroll("If you guess the whole word and get it wrong, you lose instantly.")
+    type_scroll("I'll give you the length of the word.")
+    type_scroll("Get it in 5 or less guesses and you win 20 willow.")
+    type_scroll("Get it in 6-7 guesses and you win 5 willow.")
+    type_scroll("Get it in 8-10 guesses and you lose 5 willow.")
+    type_scroll("If it takes you more than 10 guesses or you guess the wrong word, you lose 10 willow.")
+    word = random.choice(word_list)
+    correct_layout = list(word)
+    word_length = len(word)
+    guesses = 0
+    word_layout = []
+    guessed_letters = []
+    for i in range(word_length):
+        word_layout.append("_")
+    type_scroll("Are you ready? Press Enter to start.")
+    input()
+    type_scroll(f"The word is {word_length} letters long.")
+    print(" ".join(word_layout))
+
+    while 1:
+        letter = input("Guess a letter or the whole word: ")
+        guesses += 1
+        if len(letter) > 1:
+            if letter == word:
+                type_scroll("That's the word!")
+                if guesses <= 5:
+                    type_scroll(f"It only took you {guesses} guesses. Wow. You win 20 willow... ")
+                    willow += 20
+                elif guesses < 8:
+                    type_scroll(f"It took you {guesses} guesses. You win 5 willow.")
+                    willow += 5
+                elif guesses < 11:
+                    type_scroll(f"It took you {guesses} guesses! Great, I get 5 willow!")
+                    willow -= 5
+                else:
+                    type_scroll(f"But it took you {guesses} guesses! I get 10 willow!!!")
+                    willow -= 10
+                break
+            else:
+                type_scroll("Nope! That's not the word. Ha!")
+                type_scroll(f"The word was {word}.")
+                type_scroll("I get 10 willow for that. Thanks!")
+                willow -= 10
+                break
+        if letter in correct_layout:
+            type_scroll("Nice!")
+            for i in range(word_length):
+                if letter == correct_layout[i]:
+                    word_layout[i] = letter
+            print(" ".join(word_layout))
+        else:
+            guessed_letters.append(letter)
+            try:
+                int(letter)
+                type_scroll("Hey, that's a number! Not a letter!")
+                type_scroll("Although, I'm not complaining, it still counts as a guess.")
+            except ValueError:
+                type_scroll("Nope! That's not in the word.")
+        type_scroll(f"That was guess #{guesses}.")
+        type_scroll(f"These are your failed guesses: {guessed_letters}")
 
 def intro():
     global willow
+    clear_screen()
     type_scroll("Welcome to my cabin, agent.")
     type_scroll("Finally a visitor! I've been pretty bored lately.")
     type_scroll("You can call me moosespy.")
@@ -193,6 +264,7 @@ while 1:
     print("1) Number Guesser")
     print("2) Antler Cup")
     print("3) Memory Game")
+    print("4) Hangman")
     game = intinput("Please input the number of the game you wish to play: ")
     while 1:
         if game == 1:
@@ -208,6 +280,11 @@ while 1:
         elif game == 3:
             clear_screen()
             memory_game()
+            games_played += 1
+            break
+        elif game == 4:
+            clear_screen()
+            hangman()
             games_played += 1
             break
         else:
