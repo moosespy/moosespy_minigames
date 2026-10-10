@@ -247,6 +247,8 @@ while 1:
         type_scroll("You can either: ")
         type_scroll("1) Play a game with me.")
         type_scroll("2) Check your statistics.")
+        type_scroll("3) Enter save code.")
+        type_scroll("4) Save game and exit.")
         play_game = input("So what do you want to do (input # choice)? ")
         if play_game == "1":
             clear_screen()
@@ -256,9 +258,39 @@ while 1:
             type_scroll("Your statistics are: ")
             type_scroll(f"Games played: {games_played}")
             type_scroll(f"Willow remaining: {willow}")
+            print()
             type_scroll("Now then...")
+        elif play_game == "3":
+            clear_screen()
+            save_code = input("Please input your save code: ")
+            if save_code.startswith("moose") and save_code.endswith("spy"):
+                try:
+                    sub = save_code[5:]
+                    willow2 = sub.split("abc")[0]
+                    willow2 = int(willow2)
+                    try:
+                        games_played2 = sub.split("abc")[1]
+                        games_played2 = games_played2.split("spy")[0]
+                        games_played2 = int(games_played2/1000)
+                        willow = willow2
+                        games_played = games_played2
+                        type_scroll(f"Save code accepted. You now have {willow} willow.")
+                    except ValueError:
+                        type_scroll("Invalid save code.")
+                except ValueError:
+                    type_scroll("Invalid save code.")
+            else:
+                type_scroll("Invalid save code.")
+            print()
+        elif play_game == "4":
+            clear_screen()
+            save_code = f"moose{willow}abc{(games_played * 1000)}spy"
+            type_scroll("Saving game...")
+            time.sleep(1)
+            type_scroll(f"Your save code is: {save_code}")
+            sys.exit()
         else:
-            type_scroll("Come on, sir, just say 1 or 2. It's not that hard.")
+            type_scroll("Come on, sir, just say one of the numbers. It's not that hard.")
     type_scroll("Let's play a game!")
     type_scroll("Our games are: ")
     print("1) Number Guesser")
