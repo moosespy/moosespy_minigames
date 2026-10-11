@@ -10,6 +10,7 @@ from nltk.corpus import words
 word_list = words.words()
 
 games_played = 0
+games_won = 0
 
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -61,6 +62,7 @@ def randint_guess():
         type_scroll("That means you earn nothing. Too bad for you.")
     else:
         type_scroll("That means you win 20 willow... that's a bit much, but I guess I agreed...")
+        games_won += 1
         willow += 20
 def antler_cup():
     global willow
@@ -82,6 +84,7 @@ def antler_cup():
         guess = intinput("So, then. What cup is my antler chunk under? ")
         if guess == cup:
             type_scroll(f"You got it. It was cup {cup}. You won {bet} willow.")
+            games_won += 1
             if streak == 0:
                 willow += bet
             else:
@@ -130,15 +133,18 @@ def memory_game():
             type_scroll(f"Wrong! It was {n_list[i]}.")
     if correct_numbers == 10:
         type_scroll("You got all 10! You win 20 willow...")
+        games_won += 1
         willow += 20
         type_scroll("...I guess I agreed to that. I don't know why, but I did.")
         type_scroll("Good job, I guess. You have a good memory...")
     elif correct_numbers >= 8:
         type_scroll(f"You got {correct_numbers} correct. You win 10 willow.")
+        games_won += 1
         willow += 10
         type_scroll("Hmmm, you won quite a bit... Good for you, I guess?")
     elif correct_numbers >= 5:
         type_scroll(f"You got {correct_numbers} correct. You win 5 willow.")
+        games_won += 1
         willow += 5
         type_scroll("Well, you won something. Good for you.")
     else:
@@ -147,7 +153,6 @@ def memory_game():
         type_scroll("Thanks! That was tasty. I love willow.")
 def hangman():
     global willow
-    type_scroll("Hangman, huh?")
     type_scroll("You have to guess the word I'm thinking of, letter by letter.")
     type_scroll("A guess is either a letter or the whole word. ")
     type_scroll("If you guess the whole word and get it wrong, you lose instantly.")
@@ -178,9 +183,11 @@ def hangman():
                 if guesses <= 5:
                     type_scroll(f"It only took you {guesses} guesses. Wow. You win 20 willow... ")
                     willow += 20
+                    games_won += 1
                 elif guesses < 8:
                     type_scroll(f"It took you {guesses} guesses. You win 5 willow.")
                     willow += 5
+                    games_won += 1
                 elif guesses < 11:
                     type_scroll(f"It took you {guesses} guesses! Great, I get 5 willow!")
                     willow -= 5
@@ -222,20 +229,40 @@ def intro():
     type_scroll("Now, I love willow. Willow is my favorite food. If you wish to play, you must have some willow available.")
     type_scroll("Here's 50 willow. I'm feeling generous.")
     willow = 50
-    type_scroll("I'm bored, so I'll let you play some games with me.")
+    type_scroll("Like I said, I'm bored, so I'll let you play some games with me.")
     type_scroll("Lose all that willow back to me and I'll be bored again, so I'll kick you out. Game over.")
     type_scroll("So try to win as much willow as you can!")
 def ending():
     type_scroll("So you ended up losing all your willow to me.")
     time.sleep(1)
-    type_scroll("'sigh'... I'm bored again. Sadly, you'll be kicked out... ")
+    type_scroll("'sigh'... I'm gonna be bored again. Sadly, you'll be kicked out... ")
     time.sleep(1)
     type_scroll("...you're just not entertaining if you lose all your willow.")
     time.sleep(1)
+    print()
     if games_played == 1:
         type_scroll(f"At least we got to play a game... but only 1...")
+        type_scroll("How do you even lose all your willow in just one game?")
     else:
         type_scroll(f"At least we got to play {games_played} games.")
+        type_scroll(f"So you won {games_won} of those games, and lost {games_played - games_won}.")
+        type_scroll(f"That means you won {games_won/games_played * 100}% of the games you played.")
+        print()
+        if games_won/games_played < 0.25:
+            type_scroll("That's actually... pretty bad, to be honest. Either you're just really unlucky, or...")
+        elif games_won/games_played < 0.5:
+            type_scroll("That's sort of what I expected.")
+        elif games_won/games_played < 0.75:
+            type_scroll("That's pretty good... I'm fairly lucky to get all my willow back, I guess.")
+        elif games_won/games_played < 0.9:
+            type_scroll("You know, that's a bit too good. I don't know how you got your win percentage that high...")
+            type_scroll("... but what's odder is that you still lost all your willow. How did you manage that?")
+        else:
+            type_scroll("So tell me this...")
+            time.sleep(1)
+            type_scroll(f"HOW DID YOU LOSE All YOUR WILLOW WITH A {games_won/games_played * 100}% WIN PERCENTAGE?!?!")
+            type_scroll("I'm not even that happy to get my willow back, I'm just embarrassed for you.")
+        print()
     time.sleep(1)
     type_scroll("Goodbye, agent.")
     sys.exit()
@@ -256,6 +283,7 @@ while 1:
         elif play_game == "2":
             clear_screen()
             type_scroll("Your statistics are: ")
+            type_scroll(f"Games won: {games_won}")
             type_scroll(f"Games played: {games_played}")
             type_scroll(f"Willow remaining: {willow}")
             print()
