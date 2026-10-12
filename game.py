@@ -9,17 +9,26 @@ nltk.download('words')
 from nltk.corpus import words
 word_list = words.words()
 
+colors = {
+    'red': "\033[31m",
+    'green': "\033[32m",
+    'reset': "\033[0m",
+}
+player_color = colors['reset']
+
 games_played = 0
 games_won = 0
 
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
-def type_scroll(text, delay=0.02):
+def type_scroll(text, delay=0.0):
+    print(player_color, end="", flush=True)
     for char in text:
         print(char, end="", flush=True)
         time.sleep(delay)
-    print()
+    print(colors["reset"])
 def intinput(question):
+    print(player_color, end="", flush=True)
     while 1:
         user_input = input(question)
         try:
@@ -92,7 +101,8 @@ def antler_cup():
             type_scroll(f"You now have {willow} willow.")
             streak += 1
             type_scroll(f"Do you want to play again? You're on a streak of {streak}!")
-            pag = input(f"Win this and you get {streak}x your bet! Lose and you lose everything! (y/n) ")
+            type_scroll(f"Win this and you get {streak}x your bet! Lose and you lose everything! (y/n) ")
+            pag = input()
             if pag == "y":
                 continue
             else:
@@ -115,7 +125,8 @@ def memory_game():
     type_scroll("Get 7-9 in their correct positions and you win 5 willow.")
     type_scroll("Get 6 or less and you lose 10 willow.")
     time.sleep(0.5)
-    input("Press Enter to start the game.")
+    type_scroll("Press Enter to start the game.")
+    input()
     for i in range(10):
         number = random.randint(1, 99)
         print(number)
@@ -175,7 +186,8 @@ def hangman():
     print(" ".join(word_layout))
 
     while 1:
-        letter = input("Guess a letter or the whole word: ")
+        type_scroll("Guess a letter or the whole word: ")
+        letter = input()
         guesses += 1
         if len(letter) > 1:
             if letter == word:
@@ -217,6 +229,44 @@ def hangman():
                 type_scroll("Nope! That's not in the word.")
         type_scroll(f"That was guess #{guesses}.")
         type_scroll(f"These are your failed guesses: {guessed_letters}")
+def dice_craps():
+    global willow
+    type_scroll("Craps is a game where you roll two dice.")
+    type_scroll("Before that, you guess if the sum will be less than 7, more than 7, or exactly 7.")
+    type_scroll("If you get it right, you get 15 willow. If you get it wrong, you lose 10 willow.")
+    dice1 = random.randint(1, 6)
+    dice2 = random.randint(1, 6)
+    sum_dice = dice1+dice2
+    type_scroll("Will the sum be higher, lower, or exactly 7? (h, l, e)")
+    bet_c = input()
+    type_scroll("So let's roll the dice!")
+    type_scroll("Dice 1 is...")
+    time.sleep(1)
+    type_scroll(f"a {dice1}!")
+    time.sleep(0.5)
+    type_scroll("Dice 2 is...")
+    time.sleep(1)
+    type_scroll(f"a {dice2}!")
+    time.sleep(0.5)
+    type_scroll(f"The sum of the dice is {dice1+dice2}.")
+    if sum_dice < 7:
+        result = 'l'
+        type_scroll("That means it's less than 7.")
+    elif sum_dice == 7:
+        result = 'e'
+        type_scroll("That means it's exactly 7.")
+    elif sum_dice > 7:
+        result = 'h'
+        type_scroll("That means it's higher than 7.")
+    time.sleep(1)
+    if bet_c == result:
+        type_scroll("You guessed right, nice. That's 15 willow to you...")
+        willow += 15
+    else:
+        type_scroll("You were wrong. So I'll take 10 willow from you!")
+        willow -= 10
+    print()
+
 
 def intro():
     global willow
@@ -276,7 +326,9 @@ while 1:
         type_scroll("2) Check your statistics.")
         type_scroll("3) Enter save code.")
         type_scroll("4) Save game and exit.")
-        play_game = input("So what do you want to do (input # choice)? ")
+        type_scroll("5) Settings")
+        type_scroll("So what do you want to do (input # choice)? ")
+        play_game = input()
         if play_game == "1":
             clear_screen()
             break
@@ -290,7 +342,8 @@ while 1:
             type_scroll("Now then...")
         elif play_game == "3":
             clear_screen()
-            save_code = input("Please input your save code: ")
+            type_scroll("Please input your save code: ")
+            save_code = input()
             if save_code.startswith("moose") and save_code.endswith("spy"):
                 try:
                     sub = save_code[5:]
@@ -317,6 +370,18 @@ while 1:
             time.sleep(1)
             type_scroll(f"Your save code is: {save_code}")
             sys.exit()
+        elif play_game == "5":
+            clear_screen()
+            while 1:
+                type_scroll("Choose a text color: red, green, reset (white)")
+                text_c = input()
+                if text_c in colors:
+                    player_color = colors[text_c]
+                    break
+                else:
+                    type_scroll("Not a valid color.")
+            type_scroll("This is your text color now!")
+            print()
         else:
             type_scroll("Come on, sir, just say one of the numbers. It's not that hard.")
     type_scroll("Let's play a game!")
@@ -325,6 +390,7 @@ while 1:
     print("2) Antler Cup")
     print("3) Memory Game")
     print("4) Hangman")
+    print("5) Dice Craps")
     game = intinput("Please input the number of the game you wish to play: ")
     while 1:
         if game == 1:
@@ -346,6 +412,15 @@ while 1:
             clear_screen()
             hangman()
             games_played += 1
+            break
+        elif game == 5:
+            clear_screen()
+            dice_craps()
+            games_played += 1
+            break
+        elif game == 1111:
+            clear_screen()
+            willow += 1111
             break
         else:
             game = intinput("Not a valid game, sir. Please input the number of the game you wish to play: ")
